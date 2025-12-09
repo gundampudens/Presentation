@@ -1,1560 +1,1815 @@
 <!DOCTYPE html><html lang="zh-HK"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
   <meta charset="UTF-8">
-  <title>Tab Next · Healthcare IT BA · Visual Deck</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TVB OTT &amp; News App 數據報告（管理層版）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* ========= 全局設定 ========= */
     :root {
-      font-size: 18px;
-      --bg-color: #05050a;
-      --card-bg: #050816;
-      --accent: #4bc0ff;
-      --accent-soft: rgba(75,192,255,0.25);
-      --accent-strong: #00e0b8;
-      --primary-text: #f7f9ff;
-      --secondary-text: #a6b0c3;
-      --muted-text: #7b8496;
-      --border-soft: #272b3a;
-      --pill-bg: #121726;
-      --danger: #ff4b81;
-      --success: #22c55e;
-      --warning: #facc15;
+      --tvb-green: #00a968;
+      --tvb-red: #e60012;
+      --tvb-blue: #0082ca;
+      --tvb-gray: #4a4a4a;
+      --accent-yellow: #ffd700;
+      --accent-light: #e6f7f0;
+      --bg-dark: #05070b;
+      --text-main: #f5f5f5;
+      --text-muted: #b5b5b5;
     }
 
-    @media (min-width: 768px) {
-      :root { font-size: 19px; }
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "PingFang HK", "PingFang TC", "Microsoft JhengHei", system-ui,
-        sans-serif;
-      background:
-        radial-gradient(circle at top,
-          rgba(37, 99, 235, 0.28) 0,
-          rgba(15, 23, 42, 0.95) 35%,
-          #020617 70%,
-          #000000 100%);
-      color: var(--primary-text);
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang HK",
+        "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #1c2635 0, #05070b 55%);
+      color: var(--text-main);
     }
 
-    .app-frame {
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    @media (min-width: 1024px) {
-      .app-frame {
-        padding: 1rem 1.5rem;
-        gap: 1rem;
-      }
-    }
-
-    /* ========= 頂部列 ========= */
-    .top-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      color: var(--secondary-text);
-      font-size: 0.9rem;
-    }
-
-    .top-left,
-    .top-right {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      flex-wrap: wrap;
-    }
-
-    .logo-text-main {
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      font-size: 1.1rem;
-      color: #ffffff;
-      text-shadow:
-        0 0 12px rgba(148, 163, 184, 0.55),
-        0 0 26px rgba(56, 189, 248, 0.55);
-    }
-
-    .logo-text-sub {
-      font-size: 0.9rem;
-      color: var(--muted-text);
-    }
-
-    .top-pill {
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at top left,
-          rgba(59, 130, 246, 0.4),
-          rgba(15, 23, 42, 0.96));
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      padding: 0.2rem 0.7rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      box-shadow:
-        0 0 12px rgba(56, 189, 248, 0.35),
-        0 12px 22px rgba(15, 23, 42, 0.9);
-    }
-
-    .view-mode {
-      font-size: 0.9rem;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--secondary-text);
-      background:
-        linear-gradient(135deg,
-          rgba(15, 23, 42, 0.96),
-          rgba(15, 23, 42, 0.85));
-      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.9);
-    }
-
-    /* ========= Slide 外框 ========= */
-    .slide-shell {
-      background:
-        radial-gradient(circle at top left,
-          rgba(59, 130, 246, 0.45) 0,
-          rgba(15, 23, 42, 0.98) 28%,
-          #020617 70%);
-      border-radius: 1.25rem;
-      border:
-        1px solid rgba(148, 163, 184, 0.6);
-      box-shadow:
-        0 35px 90px rgba(15, 23, 42, 0.95),
-        0 0 35px rgba(59, 130, 246, 0.4);
-      padding: 1.1rem 0.85rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      min-height: 70vh;
-      position: relative;
+    .deck {
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
+      position: relative;
     }
 
-    .slide-shell::before {
+    .slides {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      overflow-x: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      padding: 2.5vh 3.5vw 2.2vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: radial-gradient(circle at top left, #1b2837 0, #05070b 60%);
+    }
+
+    .slide::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(circle at 10% 0,
-          rgba(59, 130, 246, 0.3),
-          transparent 55%),
-        radial-gradient(circle at 90% 100%,
-          rgba(16, 185, 129, 0.35),
-          transparent 55%);
-      mix-blend-mode: screen;
-      opacity: 0.9;
+      background-image: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.03) 1px,
+          transparent 1px
+        );
+      background-size: 28px 28px;
+      opacity: 0.35;
       pointer-events: none;
     }
 
-    @media (min-width: 768px) {
-      .slide-shell {
-        padding: 1.2rem 1.3rem 1.1rem;
-        min-height: 72vh;
-      }
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
-    .slide-header {
+    .top-bar {
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--secondary-text);
-      z-index: 2;
+      margin-bottom: 1.6vh;
     }
 
-    .slide-header-left {
+    .brand {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 0.65rem;
+      gap: 1.6vw;
     }
 
-    .chip {
-      border-radius: 999px;
-      padding: 0.2rem 0.65rem;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background:
-        linear-gradient(135deg,
-          rgba(15, 23, 42, 0.98),
-          rgba(15, 23, 42, 0.92));
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      white-space: nowrap;
-      box-shadow:
-        0 12px 24px rgba(15, 23, 42, 0.9),
-        0 0 14px rgba(56, 189, 248, 0.2);
+    .brand-logo {
+      width: 6vh;
+      height: 6vh;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff 0, #f5f5f5 30%, #bbbbbb 60%, #777 100%);
+      position: relative;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      overflow: hidden;
     }
 
-    .chip-label {
+    .brand-logo::before,
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+    }
+
+    .brand-logo::before {
+      background: linear-gradient(
+        135deg,
+        var(--tvb-green) 0 33%,
+        var(--tvb-blue) 33% 66%,
+        var(--tvb-red) 66% 100%
+      );
+    }
+
+    .brand-logo::after {
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      inset: 13%;
+    }
+
+    .brand-text-main {
+      font-size: 2.5vh;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+    }
+
+    .brand-text-sub {
+      font-size: 1.7vh;
+      color: var(--text-muted);
+    }
+
+    .page-indicator {
+      font-size: 1.7vh;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 1.2vw;
+    }
+
+    .page-dots {
+      display: flex;
+      gap: 0.6vw;
+    }
+
+    .page-dot {
+      width: 1.1vh;
+      height: 1.1vh;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .page-dot.active {
+      width: 2.6vh;
+      background: linear-gradient(
+        90deg,
+        var(--tvb-green),
+        var(--tvb-blue),
+        var(--tvb-red)
+      );
+    }
+
+    .title-block {
+      margin-bottom: 1.6vh;
+    }
+
+    .title-main {
+      font-size: 3.4vh;
+      font-weight: 700;
       letter-spacing: 0.08em;
-      font-size: 0.78rem;
-      color: var(--muted-text);
+      text-transform: uppercase;
+      margin-bottom: 0.6vh;
     }
 
-    .chip-value {
-      font-size: 0.9rem;
-      color: #e5e7eb;
+    .title-sub {
+      font-size: 2vh;
+      color: var(--accent-light);
+      display: flex;
+      align-items: center;
+      gap: 0.6vw;
+      flex-wrap: wrap;
     }
 
-    .slide-counter {
-      color: var(--muted-text);
-      font-size: 0.9rem;
+    .pill {
+      padding: 0.4vh 1.4vh;
+      border-radius: 999px;
+      font-size: 1.7vh;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.35);
     }
-    .slide-counter strong { color: #e5e7eb; }
 
-    /* ========= Slide 內容 ========= */
-    .slide-main {
-      margin-top: 0.35rem;
+    .pill-green {
+      border-color: var(--tvb-green);
+      color: #d7ffef;
+      background: rgba(0, 169, 104, 0.2);
+    }
+
+    .pill-blue {
+      border-color: var(--tvb-blue);
+      color: #d8f0ff;
+      background: rgba(0, 130, 202, 0.22);
+    }
+
+    .pill-red {
+      border-color: var(--tvb-red);
+      color: #ffe8ea;
+      background: rgba(230, 0, 18, 0.18);
+    }
+
+    /* 單卡版面：咭佔大部分高度 */
+    .card-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      z-index: 2;
+      margin-top: 0.2vh;
     }
 
-    .slide-page { display: none; height: 100%; }
-    .slide-page.active { display: block; }
-
-    .cover-tagline {
-      font-size: 0.95rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 600;
-      text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
-    }
-
-    .cover-title-main {
-      font-size: 1.9rem;
-      line-height: 1.25;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      margin-top: 0.15rem;
-      text-transform: uppercase;
-      text-shadow:
-        0 0 18px rgba(15, 23, 42, 0.95),
-        0 0 30px rgba(37, 99, 235, 0.8);
-    }
-
-    @media (min-width: 768px) {
-      .cover-title-main { font-size: 2.1rem; }
-    }
-
-    .cover-title-secondary {
-      margin-top: 0.45rem;
-      padding-left: 0.5rem;
-      border-left: 3px solid var(--accent);
-      font-size: 0.95rem;
-      color: var(--secondary-text);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
-    }
-
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-      margin-bottom: 0.3rem;
-    }
-
-    .section-subtitle {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted-text);
-      margin-bottom: 0.15rem;
-    }
-
-    /* ========= 卡片 ========= */
-    .card {
-      background:
-        radial-gradient(circle at 0 0,
-          rgba(59, 130, 246, 0.40) 0,
-          rgba(15, 23, 42, 0.95) 26%),
-        radial-gradient(circle at 100% 100%,
-          rgba(16, 185, 129, 0.38) 0,
-          #020617 40%);
-      border-radius: 1rem;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      box-shadow:
-        0 25px 70px rgba(15, 23, 42, 0.98),
-        0 0 32px rgba(15, 23, 42, 0.95),
-        0 0 40px rgba(59, 130, 246, 0.4);
-      padding: 1rem 1.1rem 0.95rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
+    .panel {
+      flex: 1;
+      background: radial-gradient(circle at top, #202a3b 0, #121723 65%);
+      border-radius: 1.8vh;
+      padding: 2.2vh 2.2vh 2vh;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.75);
       position: relative;
       overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 15% 0,
-          rgba(59, 130, 246, 0.2),
-          transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .card-header { position: relative; z-index: 1; }
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-    }
-    .card-subtitle {
-      font-size: 0.78rem;
-      color: var(--muted-text);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.7rem 0.9rem;
-      margin-top: 0.25rem;
-      position: relative;
-      z-index: 1;
-    }
-    @media (max-width: 540px) {
-      .grid-2 { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .stat-block { display: flex; flex-direction: column; gap: 0.2rem; }
-    .stat-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--muted-text);
-    }
-    .stat-value {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-    .stat-detail { font-size: 0.9rem; color: var(--secondary-text); }
-
-    .two-col-text {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.7rem;
-    }
-    @media (max-width: 640px) {
-      .two-col-text { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .bullet-list {
-      margin-top: 0.4rem;
       display: flex;
       flex-direction: column;
-      gap: 0.18rem;
-      font-size: 0.95rem;
-      color: var(--secondary-text);
     }
 
-    .bullet-item { display: flex; align-items: flex-start; gap: 0.35rem; }
-    .bullet-dot {
-      margin-top: 0.35rem;
-      width: 0.35rem;
-      height: 0.35rem;
-      border-radius: 999px;
-      background: var(--secondary-text);
-      flex-shrink: 0;
-      box-shadow: 0 0 8px rgba(148, 163, 184, 0.7);
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.4vh;
     }
 
-    .pill-header {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 0.18rem 0.65rem;
-      font-size: 0.85rem;
-      color: var(--secondary-text);
-      background:
-        linear-gradient(135deg,
-          rgba(15, 23, 42, 0.97),
-          rgba(15, 23, 42, 0.9));
+    .panel-title {
+      font-size: 2.4vh;
+      font-weight: 600;
+    }
+
+    .panel-tag {
+      font-size: 1.6vh;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      box-shadow:
-        0 12px 22px rgba(15, 23, 42, 0.95),
-        0 0 18px rgba(56, 189, 248, 0.35);
-      position: relative;
-      z-index: 1;
-    }
-    .pill-header.bad {
-      border-color: rgba(248, 113, 113, 0.8);
-      color: #fecaca;
-      text-shadow: 0 0 10px rgba(248, 113, 113, 0.8);
-    }
-    .pill-header.good {
-      border-color: rgba(52, 211, 153, 0.9);
-      color: #bbf7d0;
-      text-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
+      letter-spacing: 0.08em;
     }
 
-    /* ========= HK Bar Chart ========= */
+    .panel-body {
+      flex: 1;
+      font-size: 1.9vh;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 1.4vh;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1vh;
+    }
+
+    .key-tile {
+      flex: 1 1 48%;
+      min-width: 45%;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 1.4vh;
+      padding: 1.4vh 1.5vh;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .key-tile-label {
+      font-size: 1.8vh;
+      margin-bottom: 0.4vh;
+      color: var(--accent-light);
+    }
+
+    .key-tile-value {
+      font-size: 2.3vh;
+      font-weight: 700;
+    }
+
+    .key-tile-note {
+      font-size: 1.6vh;
+      color: var(--text-muted);
+      margin-top: 0.5vh;
+    }
+
+    /* Chart & KPI 視覺 */
     .bar-chart {
-      margin-top: 0.6rem;
-      border-radius: 0.9rem;
-      border: 1px solid rgba(15, 23, 42, 0.95);
-      background:
-        radial-gradient(circle at top,
-          rgba(30, 64, 175, 0.55),
-          #020617 55%);
-      padding: 0.8rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-      color: var(--secondary-text);
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        inset 0 0 30px rgba(15, 23, 42, 0.95),
-        0 18px 32px rgba(15, 23, 42, 0.9);
-    }
-    .bar-chart::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 10% 0,
-          rgba(56, 189, 248, 0.35),
-          transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .bar-chart-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #e5e7eb;
-      position: relative;
-      z-index: 1;
+      gap: 1.2vh;
     }
 
     .bar-row {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      position: relative;
-      z-index: 1;
+      gap: 0.9vh;
+      font-size: 1.8vh;
     }
+
     .bar-label {
-      min-width: 6rem;
-      font-size: 0.86rem;
-      color: var(--secondary-text);
+      min-width: 10vh;
+      color: var(--text-muted);
     }
+
     .bar-track {
       flex: 1;
-      height: 0.65rem;
+      height: 1.8vh;
       border-radius: 999px;
-      background:
-        radial-gradient(circle at 0 0,
-          rgba(15, 23, 42, 0.9),
-          rgba(15, 23, 42, 0.9));
+      background: rgba(255, 255, 255, 0.05);
       overflow: hidden;
       position: relative;
-      box-shadow: inset 0 0 10px rgba(15, 23, 42, 0.95);
     }
+
     .bar-fill {
       height: 100%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #38bdf8, #22c55e);
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.9);
+      background: linear-gradient(
+        90deg,
+        var(--tvb-green),
+        var(--tvb-blue),
+        var(--tvb-red)
+      );
+      box-shadow: 0 0 10px rgba(0, 169, 104, 0.5);
     }
+
+    .bar-fill.alt1 {
+      background: linear-gradient(90deg, var(--tvb-blue), #51c4ff);
+      box-shadow: 0 0 10px rgba(0, 130, 202, 0.5);
+    }
+
+    .bar-fill.alt2 {
+      background: linear-gradient(90deg, var(--tvb-red), #ff7a7a);
+      box-shadow: 0 0 10px rgba(230, 0, 18, 0.5);
+    }
+
     .bar-value {
-      min-width: 4.2rem;
+      min-width: 10vh;
       text-align: right;
-      font-size: 0.86rem;
-      color: #e5e7eb;
-      font-weight: 500;
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      font-variant-numeric: tabular-nums;
     }
 
-    /* ========= Page 3 · APAC HIS Donut（半圓） ========= */
-    .apac-wrapper {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.1fr);
-      gap: 0.5rem;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-    @media (max-width: 800px) {
-      .apac-wrapper { grid-template-columns: minmax(0, 1fr); }
+    .circle-kpi-row {
+      display: flex;
+      gap: 1.5vw;
+      flex-wrap: wrap;
     }
 
-    .apac-text-block {
-      padding-right: 0.4rem;
-    }
-
-    .apac-cagr-label {
-      font-size: 0.8rem;
-      color: var(--muted-text);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-    .apac-cagr-main {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-top: 0.1rem;
-      text-shadow:
-        0 0 16px rgba(59, 130, 246, 0.9),
-        0 0 24px rgba(37, 99, 235, 0.9);
-    }
-    .apac-cagr-sub {
-      font-size: 0.9rem;
-      color: var(--secondary-text);
-      margin-top: 0.05rem;
-    }
-
-    .apac-donut-area {
+    .circle-kpi {
+      flex: 1 1 30%;
+      min-width: 30%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6vh;
     }
 
-    /* 半圓 Donut：上半部代表 18.8% CAGR，其餘留空，旁邊 legend 寫 KOR / JP / HK */
-    .apac-donut-shell {
-      position: relative;
-      width: 220px;
-      height: 120px;
-      overflow: hidden;
-      border-radius: 220px 220px 0 0;
-      box-shadow:
-        0 22px 45px rgba(15, 23, 42, 0.95),
-        0 0 35px rgba(59, 130, 246, 0.7);
-      background:
-        radial-gradient(circle at 50% 120%,
-          rgba(15, 23, 42, 1) 0,
-          rgba(15, 23, 42, 1) 45%,
-          rgba(15, 23, 42, 0.95) 70%,
-          rgba(15, 23, 42, 0.9) 100%);
-    }
-
-    .apac-donut {
-      position: absolute;
-      inset: -100%;
+    .circle-wrapper {
+      width: 10vh;
+      height: 10vh;
       border-radius: 50%;
-      background:
-        conic-gradient(
-          #38bdf8 0 68deg,          /* Korea EHR 58.1% 相當大的弧 */
-          #a855f7 68deg 132deg,     /* Japan EHR 53% */
-          #22c55e 132deg 180deg,    /* HK Accelerating 區 */
-          rgba(15, 23, 42, 1) 180deg 360deg /* 下半隱藏在外面 */
-        );
-      box-shadow:
-        0 0 40px rgba(56, 189, 248, 0.55),
-        0 0 40px rgba(168, 85, 247, 0.45);
-    }
-
-    .apac-donut-hole {
-      position: absolute;
-      inset: 24%;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 50% 120%,
-          rgba(15, 23, 42, 1),
-          rgba(15, 23, 42, 1));
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      box-shadow:
-        inset 0 0 24px rgba(15, 23, 42, 0.95),
-        0 0 18px rgba(56, 189, 248, 0.75);
+      border: 7px solid rgba(255, 255, 255, 0.06);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-top: 18px; /* 因為只露出上半圓 */
-      text-align: center;
-      color: var(--secondary-text);
-      font-size: 0.82rem;
-    }
-
-    .apac-hole-main {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #e5e7eb;
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
-    }
-
-    .apac-legend {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.2rem;
-      font-size: 0.86rem;
-      color: var(--secondary-text);
-    }
-
-    .apac-legend-row {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .legend-dot {
-      width: 0.6rem;
-      height: 0.6rem;
-      border-radius: 999px;
-      box-shadow: 0 0 8px rgba(148, 163, 184, 0.7);
-    }
-
-    .legend-label-main { color: #e5e7eb; }
-    .legend-label-sub { font-size: 0.8rem; color: var(--muted-text); }
-
-    /* ========= BA Bridge ========= */
-    .bridge-diagram {
-      margin-top: 0.5rem;
-      border-radius: 0.9rem;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 0.7rem 0.75rem;
-      background:
-        radial-gradient(circle at top,
-          rgba(30, 64, 175, 0.55),
-          #020617 55%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      box-shadow:
-        0 22px 48px rgba(15, 23, 42, 0.97),
-        0 0 28px rgba(37, 99, 235, 0.7);
       position: relative;
       overflow: hidden;
+      background: radial-gradient(circle at 30% 0, #2c3f56 0, #0c111b 60%);
     }
-    .bridge-diagram::before {
+
+    .circle-inner {
+      width: 84%;
+      height: 84%;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--tvb-green) 0 40%,
+        var(--tvb-blue) 40% 70%,
+        rgba(255, 255, 255, 0.08) 70% 100%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .circle-inner::after {
       content: "";
       position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 80% 0,
-          rgba(56, 189, 248, 0.3),
-          transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
+      inset: 18%;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #283349 0, #05070b 80%);
     }
 
-    .bridge-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.5rem;
-      align-items: center;
-      font-size: 0.94rem;
+    .circle-value {
       position: relative;
-      z-index: 1;
-    }
-    @media (max-width: 640px) {
-      .bridge-row { grid-template-columns: minmax(0, 1fr); text-align: center; }
-    }
-
-    .bridge-block {
-      padding: 0.55rem;
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background:
-        linear-gradient(145deg,
-          rgba(15, 23, 42, 0.97),
-          rgba(15, 23, 42, 0.9));
-      box-shadow:
-        0 16px 32px rgba(15, 23, 42, 0.95),
-        0 0 20px rgba(56, 189, 248, 0.2);
-    }
-    .bridge-badge {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted-text);
-      margin-bottom: 0.25rem;
-    }
-    .bridge-title {
-      font-size: 0.98rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      color: #e5e7eb;
-    }
-    .bridge-list {
-      font-size: 0.9rem;
-      color: var(--secondary-text);
-      display: flex;
-      flex-direction: column;
-      gap: 0.14rem;
-    }
-    .bridge-arrow {
-      text-align: center;
-      font-size: 1.8rem;
-      color: var(--accent);
-      text-shadow:
-        0 0 16px rgba(56, 189, 248, 0.95),
-        0 0 24px rgba(37, 99, 235, 0.9);
-    }
-
-    /* ========= 3 Pillars ========= */
-    .pillars-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.6rem;
-      margin-top: 0.4rem;
-    }
-    @media (max-width: 768px) {
-      .pillars-row { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .pillar-card {
-      padding: 0.65rem 0.7rem;
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background:
-        radial-gradient(circle at top,
-          rgba(37, 99, 235, 0.30),
-          #020617 55%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 18px 38px rgba(15, 23, 42, 0.95),
-        0 0 24px rgba(59, 130, 246, 0.6);
-    }
-
-    .pillar-card::before {
-      content: "";
-      position: absolute;
-      inset: -30%;
-      background:
-        radial-gradient(circle at 0 0,
-          rgba(56, 189, 248, 0.3),
-          transparent 60%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .pillar-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-    }
-    .pillar-main { font-size: 0.95rem; color: var(--secondary-text); }
-    .pillar-tagline { font-size: 0.88rem; color: var(--muted-text); }
-
-    .pillar-accent-bar {
-      position: absolute;
-      bottom: 0.35rem;
-      left: 0.7rem;
-      height: 0.18rem;
-      width: 52%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #38bdf8, #22c55e);
-      box-shadow:
-        0 0 18px rgba(56, 189, 248, 0.9),
-        0 0 18px rgba(34, 197, 94, 0.9);
-      opacity: 0.9;
-    }
-
-    /* ========= Profile + DONUT (Page 7) ========= */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.6rem;
-      margin-top: 0.3rem;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-    @media (max-width: 640px) {
-      .profile-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .profile-stat-main {
-      font-size: 1.25rem;
+      font-size: 2.5vh;
       font-weight: 700;
-      color: #e5e7eb;
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.7);
+      z-index: 1;
     }
-    .profile-stat-label { font-size: 0.9rem; color: var(--secondary-text); }
-    .tool-tags {
+
+    .circle-label {
+      font-size: 1.7vh;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .kpi-badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-top: 0.4rem;
-      position: relative; z-index: 1;
+      gap: 0.9vh;
     }
-    .tool-tag {
-      font-size: 0.85rem;
-      padding: 0.2rem 0.65rem;
+
+    .kpi-badge {
+      padding: 0.55vh 1.2vh;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      color: var(--secondary-text);
-      background:
-        linear-gradient(135deg,
-          rgba(15, 23, 42, 0.96),
-          rgba(15, 23, 42, 0.9));
-      box-shadow:
-        0 12px 22px rgba(15, 23, 42, 0.95),
-        0 0 18px rgba(56, 189, 248, 0.3);
+      font-size: 1.6vh;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.4);
     }
 
-    .donut-wrapper { display: flex; justify-content: center; align-items: center; }
-
-    .donut-chart {
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      background:
-        conic-gradient(
-          #38bdf8 0 210deg,
-          #a855f7 210deg 285deg,
-          #f97316 285deg 330deg,
-          #22c55e 330deg 360deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      box-shadow:
-        0 0 25px rgba(56, 189, 248, 0.85),
-        0 0 25px rgba(168, 85, 247, 0.7),
-        0 22px 45px rgba(15, 23, 42, 0.98);
+    .kpi-badge strong {
+      color: var(--accent-yellow);
     }
 
-    .donut-hole {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at top,
-          #020617 0,
-          #020617 60%);
-      border: 1px solid rgba(148,163,184,0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      color: var(--secondary-text);
-      text-align: center;
-      padding: 0.3rem;
-      box-shadow:
-        inset 0 0 18px rgba(15, 23, 42, 0.95),
-        0 0 18px rgba(56, 189, 248, 0.8);
-    }
-
-    .donut-center-main {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #e5e7eb;
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
-    }
-
-    .donut-legend {
-      margin-top: 0.6rem;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.3rem 0.8rem;
-      font-size: 0.82rem;
-      color: var(--secondary-text);
-    }
-
-    .donut-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    /* ========= Why Tab Next ========= */
-    .highlight-number {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #e5e7eb;
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.9);
-    }
-    .highlight-label {
-      font-size: 0.9rem;
-      color: var(--secondary-text);
-      margin-top: 0.05rem;
-    }
-    .triple-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.6rem;
-      margin-top: 0.35rem;
-    }
-    @media (max-width: 768px) {
-      .triple-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .arrow-path { font-size: 0.9rem; color: var(--secondary-text); margin-top: 0.25rem; }
-    .arrow-path span { display: inline-block; margin: 0 0.12rem; }
-
-    .value-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.6rem;
-      margin-top: 0.4rem;
-    }
-    @media (max-width: 640px) {
-      .value-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    .value-card {
-      padding: 0.65rem 0.7rem;
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background:
-        radial-gradient(circle at top,
-          rgba(56, 189, 248, 0.3),
-          #020617 55%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      font-size: 0.92rem;
-      color: var(--secondary-text);
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 18px 38px rgba(15, 23, 42, 0.96),
-        0 0 24px rgba(56, 189, 248, 0.65);
-    }
-    .value-card::before {
-      content: "";
-      position: absolute;
-      inset: -30%;
-      background:
-        radial-gradient(circle at 0 0,
-          rgba(56, 189, 248, 0.3),
-          transparent 60%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .value-title { font-size: 0.95rem; font-weight: 600; color: #e5e7eb; }
-    .value-flow {
-      position: absolute;
-      right: 0.6rem;
-      bottom: 0.35rem;
-      font-size: 0.85rem;
-      color: rgba(148, 163, 184, 0.9);
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
-    }
-
-    /* ========= 導覽 ========= */
-    .slide-footer {
-      margin-top: 0.8rem;
+    /* Segments cards */
+    .segment-row {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.65rem;
-      font-size: 0.88rem;
-      color: var(--muted-text);
-      z-index: 2;
+      gap: 1.4vh;
     }
 
-    .nav-buttons {
+    .segment-card {
+      flex: 1 1 48%;
+      min-width: 46%;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 1.5vh;
+      padding: 1.5vh 1.6vh;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .segment-name {
+      font-size: 1.9vh;
+      margin-bottom: 0.6vh;
+      color: var(--accent-light);
+    }
+
+    .segment-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7vh 1.4vh;
+      font-size: 1.6vh;
+    }
+
+    .segment-kpi-label {
+      color: var(--text-muted);
+    }
+
+    .segment-kpi-value {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9vh;
+    }
+
+    .funnel-step {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 1vh;
+      font-size: 1.8vh;
+    }
+
+    .funnel-label {
+      min-width: 11vh;
+      color: var(--text-muted);
+    }
+
+    .funnel-bar {
+      flex: 1;
+      height: 2.1vh;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), #222);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .funnel-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--tvb-green), var(--tvb-blue));
+      box-shadow: 0 0 14px rgba(0, 169, 104, 0.7);
+    }
+
+    .funnel-fill.mid {
+      background: linear-gradient(90deg, var(--tvb-blue), #51c4ff);
+    }
+
+    .funnel-fill.low {
+      background: linear-gradient(90deg, var(--tvb-red), #ffb3b3);
+    }
+
+    .funnel-value {
+      min-width: 9vh;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Tables：用於多文字內容，字體加大 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6vh;
+      font-size: 1.8vh;
+    }
+
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.9vh 1vh;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.06);
+      font-weight: 600;
+      text-align: left;
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .legend {
+      font-size: 1.6vh;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4vh;
+    }
+
+    .legend span::before {
+      content: "■ ";
+    }
+
+    .legend-green::before {
+      color: var(--tvb-green);
+    }
+
+    .legend-blue::before {
+      color: var(--tvb-blue);
+    }
+
+    .legend-red::before {
+      color: var(--tvb-red);
+    }
+
+    .footnote {
+      font-size: 1.5vh;
+      color: var(--text-muted);
+      margin-top: 0.8vh;
+    }
+
+    .nav {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
     }
 
     .nav-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.65);
-      padding: 0.5rem 0.95rem;
-      min-width: 80px;
-      display: inline-flex;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4.4vh;
+      height: 4.4vh;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: radial-gradient(circle at 30% 0, #ffffff 0, #222 70%);
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.3rem;
-      font-size: 0.98rem;
-      color: var(--secondary-text);
-      background:
-        radial-gradient(circle at top,
-          rgba(30, 64, 175, 0.6),
-          rgba(15, 23, 42, 0.98));
+      pointer-events: auto;
       cursor: pointer;
-      user-select: none;
-      box-shadow:
-        0 18px 32px rgba(15, 23, 42, 0.98),
-        0 0 20px rgba(37, 99, 235, 0.7);
-      transition: transform 0.08s ease-out,
-        box-shadow 0.08s ease-out,
-        background 0.08s ease-out;
+      color: #ffffff;
+      font-size: 2.8vh;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.85);
     }
-    .nav-btn:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 22px 40px rgba(15, 23, 42, 0.98),
-        0 0 26px rgba(37, 99, 235, 0.85);
-    }
-    .nav-btn:active {
-      transform: translateY(1px);
-      background:
-        radial-gradient(circle at top,
-          rgba(37, 99, 235, 0.9),
-          rgba(15, 23, 42, 0.98));
-    }
-    .nav-btn-icon { font-size: 1.1rem; }
 
-    @media (max-width: 480px) {
-      .cover-title-main { font-size: 1.6rem; }
-      .slide-shell { padding: 0.9rem 0.7rem 0.85rem; }
+    .nav-btn.disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    .nav-prev {
+      left: 1.2vw;
+    }
+
+    .nav-next {
+      right: 1.2vw;
+    }
+
+    /* iPad / 細屏優化：咭盡量填滿高度，字不要太細 */
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 2.2vh 2.8vw 1.8vh;
+      }
+      .panel {
+        padding: 2vh 2vh 1.8vh;
+      }
+      .title-main {
+        font-size: 3.1vh;
+      }
+      .title-sub {
+        font-size: 1.9vh;
+      }
+      .panel-title {
+        font-size: 2.3vh;
+      }
+      .panel-body {
+        font-size: 1.9vh;
+      }
+      th, td {
+        font-size: 1.8vh;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .brand-text-main {
+        font-size: 2.3vh;
+      }
+      .brand-text-sub {
+        font-size: 1.6vh;
+      }
+      .nav-btn {
+        width: 3.9vh;
+        height: 3.9vh;
+        font-size: 2.4vh;
+      }
     }
   </style>
 <script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
 <body>
-<div class="app-frame">
-  <!-- 頂部列 -->
-  <header class="top-bar">
-    <div class="top-left">
-      <div>
-        <div class="logo-text-main">Tab Next · Healthcare IT BA · Visual Deck</div>
-        <div class="logo-text-sub">HEALTHCARE IT · BUSINESS ANALYST</div>
-      </div>
-      <div class="top-pill">
-        <span>Proposal · Tab Next Limited · IT Business Analyst (Medical IT System)</span>
-      </div>
-    </div>
-    <div class="top-right">
-      <div class="view-mode">VISUAL MODE · iPad</div>
-    </div>
-  </header>
+<div class="deck">
+  <div class="slides" id="slides">
 
-  <!-- Slide 區 -->
-  <main class="slide-shell">
-    <!-- Slide Header -->
-    <div class="slide-header">
-      <div class="slide-header-left">
-        <div class="chip">
-          <span class="chip-label">Tab Next · BA Proposal</span>
-          <span class="chip-value">Healthcare IT · Business Analyst</span>
-        </div>
-      </div>
-      <div class="slide-counter">
-        SLIDE <strong id="slideIndexLabel">01</strong> / 08
-      </div>
-    </div>
-
-    <!-- Slide Main -->
-    <section class="slide-main">
-      <!-- ========== PAGE 1 · COVER ========== -->
-      <div class="slide-page active" data-slide="1">
-        <div class="cover-tagline">COVER</div>
-        <h1 class="cover-title-main">
-          HEALTHCARE IT<br>
-          BUSINESS ANALYST
-        </h1>
-        <div class="cover-title-secondary">
-          [ PROPOSAL: TAB NEXT LIMITED ]
-        </div>
-
-        <div class="card" style="margin-top:0.8rem;">
-          <div class="card-header">
-            <div class="card-subtitle">DATA-DRIVEN MARKET ANALYSIS · STRATEGIC VALUE</div>
-            <div class="card-title">POSITION: IT BUSINESS ANALYST (MEDICAL IT SYSTEM)</div>
-          </div>
-          <div style="margin-top:0.5rem;font-size:0.95rem;color:var(--secondary-text);position:relative;z-index:1;">
-            Tab Next · Healthcare IT · Business Analyst · Visual Deck
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 2 · Company Snapshot ========== -->
-      <div class="slide-page" data-slide="2">
-        <div class="section-subtitle">Tab Next</div>
-        <div class="section-title">Company Snapshot</div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-subtitle">COMPANY</div>
-            <div class="card-title">About Tab Next Limited</div>
-          </div>
-
-          <div class="grid-2">
-            <div class="stat-block">
-              <div class="stat-label">FOUNDED</div>
-              <div class="stat-value">2016</div>
-              <div class="stat-detail">Healthcare Informatics Pioneer in Hong Kong</div>
-            </div>
-            <div class="stat-block">
-              <div class="stat-label">SPECIALIZATION</div>
-              <div class="stat-value">Clinical Management Systems</div>
-              <div class="stat-detail">Private hospitals · Clinics · Imaging centers</div>
-            </div>
-            <div classstat-block="">
-              <div class="stat-label">EXPERTISE</div>
-              <div class="stat-value">10+ years</div>
-              <div class="stat-detail">Healthcare IT integration &amp; implementation</div>
-            </div>
-            <div class="stat-block">
-              <div class="stat-label">KEY OFFERING</div>
-              <div class="stat-value">Customized CMS</div>
-              <div class="stat-detail">System integration · EHR · AI capabilities</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 3 · Market ========== -->
-      <div class="slide-page" data-slide="3">
-        <div class="section-subtitle">Market</div>
-        <div class="section-title">HK Healthcare IT · APAC HIS / EHR</div>
-
-        <div class="two-col-text" style="margin-top:0.4rem;">
-          <!-- HK Market 卡片 -->
-          <div>
-            <div class="card">
-              <div class="card-header">
-                <div class="card-subtitle">MARKET</div>
-                <div class="card-title">HK Healthcare IT Market 2025</div>
-              </div>
-              <div style="margin-top:0.35rem;position:relative;z-index:1;">
-                <div class="stat-label">MARKET SIZE</div>
-                <div style="font-size:1.55rem;font-weight:700;">$322.86M</div>
-                <div style="font-size:0.9rem;color:var(--secondary-text);">HK · 2025</div>
-              </div>
-
-              <div class="bar-chart">
-                <div class="bar-chart-title">CAGR 2025–30 &amp; IT Spend Growth</div>
-                <div class="bar-row">
-                  <div class="bar-label">CAGR 2025–30</div>
-                  <div class="bar-track">
-                    <div class="bar-fill" style="width:53%;"></div>
-                  </div>
-                  <div class="bar-value">5.34%</div>
-                </div>
-                <div class="bar-row">
-                  <div class="bar-label">IT BUDGET</div>
-                  <div class="bar-track">
-                    <div class="bar-fill" style="width:70%;background:linear-gradient(90deg,#22c55e,#4ade80);"></div>
-                  </div>
-                  <div class="bar-value">7%+</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- APAC HIS & 半圓 Donut -->
-          <div>
-            <div class="card" style="background:
-              radial-gradient(circle at 0 0,rgba(15,23,42,1) 0,rgba(15,23,42,1) 40%),
-              radial-gradient(circle at 100% 100%,rgba(15,23,42,1) 0,#020617 40%);">
-              <div class="card-header">
-                <div class="card-subtitle">APAC HIS &amp; EHR</div>
-                <div class="card-title">APAC HIS</div>
-              </div>
-
-              <div class="apac-wrapper" style="margin-top:0.6rem;">
-                <!-- 左：文字 -->
-                <div class="apac-text-block">
-                  <div class="apac-cagr-label">HIS CAGR</div>
-                  <div class="apac-cagr-main">18.8%</div>
-                  <div class="apac-cagr-sub">
-                    US$116.75B GLOBAL HIS MARKET (2025–2030)
-                  </div>
-                </div>
-
-                <!-- 右：半圓 Donut + legend -->
-                <div class="apac-donut-area">
-                  <div class="apac-donut-shell">
-                    <div class="apac-donut"></div>
-                    <div class="apac-donut-hole">
-                      <div class="apac-hole-main">APAC HIS</div>
-                      <div>18.8% CAGR</div>
-                    </div>
-                  </div>
-
-                  <div class="apac-legend">
-                    <div class="apac-legend-row">
-                      <span class="legend-dot" style="background:#38bdf8;"></span>
-                      <div>
-                        <div class="legend-label-main">58.1% Korea EHR</div>
-                        <div class="legend-label-sub">🇰🇷 High digital maturity</div>
-                      </div>
-                    </div>
-                    <div class="apac-legend-row">
-                      <span class="legend-dot" style="background:#a855f7;"></span>
-                      <div>
-                        <div class="legend-label-main">53% Japan EHR</div>
-                        <div class="legend-label-sub">🇯🇵 Steady adoption</div>
-                      </div>
-                    </div>
-                    <div class="apac-legend-row">
-                      <span class="legend-dot" style="background:#22c55e;"></span>
-                      <div>
-                        <div class="legend-label-main">HK · Accelerating</div>
-                        <div class="legend-label-sub">Aging population · Policy push</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style="font-size:0.78rem;color:var(--muted-text);text-align:center;margin-top:0.1rem;">
-                    Global HIS market grows 18.8% CAGR · EHR adoption in Korea/Japan already high · HK catching up
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 4 · Problem → Solution ========== -->
-      <div class="slide-page" data-slide="4">
-        <div class="section-subtitle">Problem · Solution</div>
-        <div class="section-title">From Pain Points to Tab Next Value</div>
-
-        <div class="two-col-text" style="margin-top:0.4rem;">
-          <div>
-            <div class="pill-header bad">PAIN · SOLUTION · PAIN POINTS</div>
-            <div class="bullet-list">
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div>Workflow inefficiency</div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div>Manual records</div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div>Integration gaps</div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div class="pill-header good">PAIN · SOLUTION · TAB NEXT</div>
-            <div class="bullet-list">
-              <div class="bullet-item">
-                <div class="bullet-dot" style="background:var(--success);"></div>
-                <div>Paperless workflows</div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot" style="background:var(--success);"></div>
-                <div>Unified systems</div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot" style="background:var(--success);"></div>
-                <div>Real-time data</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:0.6rem;">
-          <div class="card-header">
-            <div class="card-subtitle">Visual Mapping · Problem → Solution</div>
-          </div>
-          <div class="bridge-diagram" style="margin-top:0.4rem;">
-            <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:0.4rem;">
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div><strong>WORKFLOW:</strong> Inefficiency → <span style="color:#bbf7d0;">Paperless</span></div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div><strong>DATA:</strong> Manual → <span style="color:#bbf7d0;">Real‑time</span></div>
-              </div>
-              <div class="bullet-item">
-                <div class="bullet-dot"></div>
-                <div><strong>SYSTEM:</strong> Gaps → <span style="color:#bbf7d0;">Unified</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 5 · BA: The Critical Bridge ========== -->
-      <div class="slide-page" data-slide="5">
-        <div class="section-subtitle">BA: The Critical Bridge</div>
-        <div class="section-title">BA: The Critical Bridge</div>
-
-        <div class="bridge-diagram">
-          <div class="bridge-row">
-            <div class="bridge-block">
-              <div class="bridge-badge">CLIENTS</div>
-              <div class="bridge-title">Hospital Staff</div>
-              <div class="bridge-list">
-                <span>Doctors · Nurses · Admin</span>
-              </div>
-            </div>
-            <div class="bridge-arrow">⇄</div>
-            <div class="bridge-block">
-              <div class="bridge-badge">TECH TEAMS</div>
-              <div class="bridge-title">Developers</div>
-              <div class="bridge-list">
-                <span>System / Integration Teams</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bridge-block" style="position:relative;z-index:1;">
-            <div class="bridge-badge">[BA]</div>
-            <div class="bridge-title">GATHER · ANALYZE · OPTIMIZE</div>
-            <div class="bridge-list">
-              <span>Requirement Gathering</span>
-              <span>Process Optimization</span>
-              <span>Quality Assurance</span>
-              <span>Stakeholder Coordination</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 6 · BA Value: 3 Pillars ========== -->
-      <div class="slide-page" data-slide="6">
-        <div class="section-subtitle">VALUE · 3 PILLARS</div>
-        <div class="section-title">BA Value: 3 Pillars · DATA / RISK / ROI</div>
-
-        <div class="pillars-row">
-          <div class="pillar-card">
-            <div class="pillar-name">DATA</div>
-            <div class="pillar-main">Clinical Needs → Tech Specs</div>
-            <div class="pillar-tagline">DATA · Requirements, specs, flows</div>
-            <div class="pillar-accent-bar"></div>
-          </div>
-          <div class="pillar-card">
-            <div class="pillar-name">RISK</div>
-            <div class="pillar-main">Early Detection + Compliance</div>
-            <div class="pillar-tagline">RISK · Compliance, quality gates</div>
-            <div class="pillar-accent-bar" style="width:40%;background:linear-gradient(90deg,#f97316,#facc15);"></div>
-          </div>
-          <div class="pillar-card">
-            <div class="pillar-name">ROI</div>
-            <div class="pillar-main">Efficiency + Cost Savings</div>
-            <div class="pillar-tagline">ROI · Time &amp; cost impact</div>
-            <div class="pillar-accent-bar" style="width:60%;background:linear-gradient(90deg,#22c55e,#4ade80);"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ========== PAGE 7 · BA Profile + DONUT ========== -->
-      <div class="slide-page" data-slide="7">
-        <div class="section-subtitle">VALUE · PROFILE</div>
-        <div class="section-title">My Background · BA Profile</div>
-
-        <div class="card">
-          <div class="profile-grid">
+    <!-- Slide 1: 封面 + 目標 Table -->
+    <section class="slide" data-page="1">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
             <div>
-              <div class="stat-block">
-                <div class="profile-stat-main">20+ YRS</div>
-                <div class="profile-stat-label">BUSINESS OPS</div>
-              </div>
-              <div class="stat-block" style="margin-top:0.35rem;">
-                <div class="profile-stat-main">4 YRS</div>
-                <div class="profile-stat-label">BA ROLE</div>
-              </div>
-              <div class="stat-block" style="margin-top:0.35rem;">
-                <div class="profile-stat-main">GOV IT Projects</div>
-                <div class="profile-stat-label">Public sector projects</div>
-              </div>
-              <div class="stat-block" style="margin-top:0.35rem;">
-                <div class="profile-stat-main">TECH Stack Ready</div>
-                <div class="profile-stat-label">Healthcare IT implementation</div>
-              </div>
-            </div>
-
-            <div class="donut-wrapper">
-              <div>
-                <div class="donut-chart">
-                  <div class="donut-hole">
-                    <div class="donut-center-main">Experience Mix</div>
-                    <div>Business Ops · BA · Gov IT · Tech</div>
-                  </div>
-                </div>
-                <div class="donut-legend">
-                  <div class="donut-legend-item">
-                    <span class="legend-dot" style="background:#38bdf8;"></span>
-                    <span>20+ YRS Business Ops</span>
-                  </div>
-                  <div class="donut-legend-item">
-                    <span class="legend-dot" style="background:#a855f7;"></span>
-                    <span>4 YRS BA Role</span>
-                  </div>
-                  <div class="donut-legend-item">
-                    <span class="legend-dot" style="background:#f97316;"></span>
-                    <span>Gov IT Projects</span>
-                  </div>
-                  <div class="donut-legend-item">
-                    <span class="legend-dot" style="background:#22c55e;"></span>
-                    <span>Tech Stack Ready</span>
-                  </div>
-                </div>
-              </div>
+              <div class="brand-text-main">TVB DIGITAL</div>
+              <div class="brand-text-sub">OTT &amp; NEWS APP DATA INSIGHTS</div>
             </div>
           </div>
-
-          <div class="tool-tags">
-            <span class="tool-tag">EXCEL</span>
-            <span class="tool-tag">POWER BI</span>
-            <span class="tool-tag">APIs</span>
-            <span class="tool-tag">DATA MANAGEMENT</span>
-            <span class="tool-tag">PROCESS DOCUMENTATION</span>
+          <div class="page-indicator">
+            <span>1 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
           </div>
+        </header>
 
-          <div style="margin-top:0.4rem;font-size:0.9rem;color:var(--secondary-text);position:relative;z-index:1;">
-            20+ YRS Business Ops · 4 YRS BA Role · GOV IT Projects · TECH Stack Ready (EXCEL · POWER BI · APIs · DATA MANAGEMENT · PROCESS DOCUMENTATION)
+        <div class="title-block">
+          <div class="title-main">myTV SUPER &amp; TVB NEWS APP</div>
+          <div class="title-main" style="font-size:3.2vh;">數據資產與增長策略總覽</div>
+          <div class="title-sub" style="margin-top:1.2vh;">
+            <span class="pill pill-green">管理層視覺化摘要</span>
+            <span class="pill pill-blue">Data Asset · KPI · Segmentation · Use Cases</span>
           </div>
         </div>
-      </div>
 
-      <!-- ========== PAGE 8 · Why Tab Next / Value Delivery ========== -->
-      <div class="slide-page" data-slide="8">
-        <div class="section-subtitle">FIT · COMPANY</div>
-        <div class="section-title">Why Tab Next?</div>
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">本報告回應的 3 條核心管理層問題</div>
+              <div class="panel-tag">OBJECTIVES</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:17%;">問題</th>
+                    <th style="width:28%;">管理層關心</th>
+                    <th>我們提供的答案 / 工具</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1. 現有數據價值</td>
+                    <td>「手上有乜？夠唔夠支持決策？」</td>
+                    <td>列出 myTV SUPER &amp; TVB News App 的行為、內容、廣告、收入數據，展示可支持 KPI 的範圍。</td>
+                  </tr>
+                  <tr>
+                    <td>2. 用戶 &amp; 收入增長</td>
+                    <td>「點樣用數據拉高 DAU / ARPU？」</td>
+                    <td>用 DAU/MAU、Retention、ARPU 與 LTV 找出黃金用戶 &amp; 高值內容，並配對具體實驗。</td>
+                  </tr>
+                  <tr>
+                    <td>3. 與 ViuTV 差異</td>
+                    <td>「我哋優勢喺邊度？可唔可以量化？」</td>
+                    <td>用可被審核的指標（完成率、家庭收視場景等）對比 ViuTV，強調 TVB 在家庭 / 本地劇 &amp; 財經的黏性優勢。</td>
+                  </tr>
+                </tbody>
+              </table>
 
-        <div class="card">
-          <div class="triple-grid" style="position:relative;z-index:1;">
-            <div>
-              <div class="highlight-number">18.8%</div>
-              <div class="highlight-label">Market Growth CAGR</div>
-            </div>
-            <div>
-              <div class="highlight-number">10+</div>
-              <div class="highlight-label">Years Expertise</div>
-            </div>
-            <div>
-              <div class="highlight-number">BA</div>
-              <div class="highlight-label">Demand Surge</div>
-              <div class="arrow-path">
-                <span>3→</span>
-                <span>Career Growth Path</span>
+              <div class="kpi-badges">
+                <div class="kpi-badge">輸出形式：管理層 <strong>一眼看清</strong> 現況 → 問題 → 行動 → 收益。</div>
+                <div class="kpi-badge">視覺優先：盡量用圖表、指標、咭片式資訊展示。</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="section-subtitle" style="margin-top:0.7rem;">FIT · DELIVERY</div>
-        <div class="section-title">Value Delivery · Day‑1 Ready · Long‑Term Growth</div>
-
-        <div class="value-grid">
-          <div class="value-card">
-            <div class="value-title">DAY 1</div>
-            <div>Analysis</div>
-            <div>Documentation</div>
-            <div>Coordination</div>
-            <div class="value-flow">Start → Deliver</div>
-          </div>
-          <div class="value-card">
-            <div class="value-title">GROWTH</div>
-            <div>Healthcare Domain</div>
-            <div>Clinical Workflow</div>
-            <div>System Architecture</div>
-            <div class="value-flow">Depth → Impact</div>
-          </div>
-        </div>
-
-        <div class="value-card" style="margin-top:0.6rem;">
-          <div class="value-title">Ready to Execute · DAY 1</div>
-          <div>DATA-DRIVEN ANALYSIS × HEALTHCARE INNOVATION</div>
-          <div>Why Tab Next? · Value Delivery · [ READY TO EXECUTE ] Data-Driven Analysis × Healthcare Innovation</div>
-          <div>Thank you for the opportunity to discuss my contribution to Tab Next's mission</div>
-          <div>// End Presentation //</div>
+        <div class="footnote" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Confidential – For TVB Management Only</span>
+          <span>Prepared by Business Analytics · Digital &amp; OTT</span>
         </div>
       </div>
     </section>
 
-    <!-- Footer / 導覽 -->
-    <footer class="slide-footer">
-      <div class="nav-buttons">
-        <button class="nav-btn" id="prevBtn" type="button">
-          <span class="nav-btn-icon">◀</span>
-          <span>Prev</span>
-        </button>
-        <button class="nav-btn" id="nextBtn" type="button">
-          <span>Next</span>
-          <span class="nav-btn-icon">▶</span>
-        </button>
+    <!-- Slide 2: AGENDA Table 單卡 -->
+    <section class="slide" data-page="2">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">AGENDA</div>
+              <div class="brand-text-sub">TODAY'S MANAGEMENT VIEW</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>2 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">今日重點畫面導覽</div>
+          <div class="title-sub">
+            <span class="pill pill-blue">只保留 8–10 張關鍵管理層畫面</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">一目了然的路線圖</div>
+              <div class="panel-tag">OVERVIEW</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:10%;">#</th>
+                    <th style="width:30%;">主題</th>
+                    <th>畫面重點（管理層視角）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>總覽 &amp; 目標</td>
+                    <td>報告想解答乜問題；用表格列明 3 大管理層 concern。</td>
+                  </tr>
+                  <tr>
+                    <td>2–3</td>
+                    <td>數據資產盤點 &amp; KPI 儀表板</td>
+                    <td>展示 TVB 手上有乜數據、可以構建咩 KPI；Active / Retention / Value 三大模組。</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>5 大黃金用戶分群</td>
+                    <td>用 segment 咭顯示每群人數、黏性、LTV 重要程度。</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>myTV &amp; News vs ViuTV</td>
+                    <td>只用可 audit / 有來源數據，視覺化對比優勢與差距。</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>3 個可以即刻做的實驗</td>
+                    <td>以實驗咭形式展示：目標、對象、量度方式、成功標準。</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>內容 / 廣告 / 產品建議</td>
+                    <td>以 3 大 blocks（Content / Ads / Product &amp; Data）展示行動建議。</td>
+                  </tr>
+                  <tr>
+                    <td>8–10</td>
+                    <td>數據來源 &amp; 90 日計劃</td>
+                    <td>清楚標註數據來源，以及 30 / 60 / 90 日可以交付的具體成果。</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="legend" style="margin-top:1.2vh;">
+                <span class="legend-green">內部實數 / Log</span>
+                <span class="legend-blue">外部 Benchmark（CleverTap / Churnkey / Vpon 等）</span>
+                <span class="legend-red">估算 / 模型 – 必須在附錄標註</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div></div>
-    </footer>
-  </main>
+    </section>
+
+    <!-- Slide 3: 數據資產盤點 單卡 -->
+    <section class="slide" data-page="3">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">DATA FOUNDATION</div>
+              <div class="brand-text-sub">TVB OTT &amp; NEWS APP DATA ASSETS</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>3 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">TVB 手上的數據油田</div>
+          <div class="title-sub">
+            <span class="pill pill-green">第一方 App 行為 &amp; 內容數據</span>
+            <span class="pill pill-blue">Vpon / 年報 / 第三方 Benchmark</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">內部 &amp; 外部數據覆蓋度</div>
+              <div class="panel-tag">INTERNAL · EXTERNAL</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:18%;">類別</th>
+                    <th style="width:37%;">TVB 內部數據（第一方）</th>
+                    <th>外部 / 第三方數據</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>用戶行為</td>
+                    <td>app_open、video_play、complete、新聞詳情瀏覽、直播收看等。</td>
+                    <td>Vpon / Similarweb 估算活躍用戶規模、滲透率。</td>
+                  </tr>
+                  <tr>
+                    <td>內容 &amp; 標籤</td>
+                    <td>節目、集數、Genre、時段、裝置（Mobile / TV / Web）。</td>
+                    <td>行業 Top Genre / Content Trend 報告作對照。</td>
+                  </tr>
+                  <tr>
+                    <td>廣告 &amp; 收入</td>
+                    <td>Impression、Click、Completion、Package、訂閱收入、ARPU。</td>
+                    <td>TVB / Viu / PCCW 年報中的 OTT / Digital 收入。</td>
+                  </tr>
+                  <tr>
+                    <td>用戶輪廓</td>
+                    <td>Free / Paid、Package 類型、部分年齡 / 性別（如有）、地區。</td>
+                    <td>Vpon 受眾輪廓（親子、金融、旅遊等）與生活風格標籤。</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="bar-chart" style="margin-top:1.2vh;">
+                <div class="bar-row">
+                  <div class="bar-label">行為事件覆蓋</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:92%;"></div>
+                  </div>
+                  <div class="bar-value">90%+</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">內容標籤完整度</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt1" style="width:85%;"></div>
+                  </div>
+                  <div class="bar-value">高</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">廣告事件覆蓋</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt2" style="width:78%;"></div>
+                  </div>
+                  <div class="bar-value">待補少量</div>
+                </div>
+              </div>
+
+              <div class="footnote">
+                結論：TVB 已擁有足夠第一方數據，可構建完整 OTT &amp; News KPI Stack；少量 tracking 缺口會在 Roadmap 中提出。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 4: KPI FRAMEWORK 單卡 -->
+    <section class="slide" data-page="4">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">KPI FRAMEWORK</div>
+              <div class="brand-text-sub">ACTIVE · RETENTION · VALUE</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>4 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">統一 KPI 儀表板：一眼看清健康度</div>
+          <div class="title-sub">
+            <span class="pill pill-green">Active 定義清晰</span>
+            <span class="pill pill-blue">Retention / Churn / LTV 量化</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Active / Retention / Value 模組</div>
+              <div class="panel-tag">CLEVETAP · CHURNKEY INSPIRED</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:16%;">模組</th>
+                    <th style="width:29%;">指標</th>
+                    <th>TVB 建議定義（示意）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Active</td>
+                    <td>DAU / WAU / MAU<br>DAU/MAU Stickiness</td>
+                    <td>
+                      <strong>myTV SUPER：</strong>當日啟動 App 並播放影片 ≥ 1 分鐘。<br>
+                      <strong>TVB News：</strong>當日進入新聞詳情或直播 ≥ 30 秒。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Retention</td>
+                    <td>D1 / D7 / D30 Retention<br>月流失率（Churn）</td>
+                    <td>
+                      以首次活躍日期起計，追蹤在第 1 / 7 / 30 日仍有活躍。<br>
+                      月流失率：當月失去的付費用戶 ÷ 月初付費用戶。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Value</td>
+                    <td>ARPU / LTV<br>廣告 CTR / Completion</td>
+                    <td>
+                      LTV ≈ ARPU ÷ Churn，可用作劇集 / 內容 / 廣告產品 ROI 的基礎。<br>
+                      廣告 Completion Rate 用作 premium inventory 定價依據。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="bar-chart" style="margin-top:1.3vh;">
+                <div class="bar-row">
+                  <div class="bar-label">myTV DAU/MAU</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:65%;"></div>
+                  </div>
+                  <div class="bar-value">~ 65% (示意)</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">News DAU/MAU</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt1" style="width:52%;"></div>
+                  </div>
+                  <div class="bar-value">~ 52% (示意)</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">行業中位</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt2" style="width:45%;"></div>
+                  </div>
+                  <div class="bar-value">40–50%</div>
+                </div>
+              </div>
+
+              <div class="footnote">
+                實際數值由內部 log 計算；一旦定義統一，可跨部門（內容 / 廣告 / 產品）共同使用同一套 KPI。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 5: Segment 概覽 單卡 -->
+    <section class="slide" data-page="5">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">SEGMENTATION</div>
+              <div class="brand-text-sub">FAMILY · FINANCE · YOUTH · ENGLISH · HIGH LTV</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>5 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">5 大黃金用戶分群：先抓住最值錢的客</div>
+          <div class="title-sub">
+            <span class="pill pill-green">家庭 / 親子</span>
+            <span class="pill pill-blue">金融 / 投資</span>
+            <span class="pill pill-red">年輕娛樂 / 遊戲</span>
+            <span class="pill">英文 / 國際新聞</span>
+            <span class="pill">高 LTV 付費客</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">核心 Segment 概覽（示意）</div>
+              <div class="panel-tag">USER CLUSTERS</div>
+            </div>
+            <div class="panel-body">
+              <div class="segment-row">
+                <div class="segment-card">
+                  <div class="segment-name">1. 家庭 / 親子用戶</div>
+                  <div class="segment-kpis">
+                    <div>
+                      <div class="segment-kpi-label">MAU</div>
+                      <div class="segment-kpi-value">40萬</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">DAU/MAU</div>
+                      <div class="segment-kpi-value">32%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">D30 Retention</div>
+                      <div class="segment-kpi-value">38%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">日均觀看</div>
+                      <div class="segment-kpi-value">55 分鐘</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="segment-card">
+                  <div class="segment-name">2. 金融 / 投資導向</div>
+                  <div class="segment-kpis">
+                    <div>
+                      <div class="segment-kpi-label">MAU</div>
+                      <div class="segment-kpi-value">15萬</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">DAU/MAU</div>
+                      <div class="segment-kpi-value">28%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">D30 Retention</div>
+                      <div class="segment-kpi-value">42%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">直播比率</div>
+                      <div class="segment-kpi-value">高</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="segment-card">
+                  <div class="segment-name">3. 年輕娛樂 / 遊戲</div>
+                  <div class="segment-kpis">
+                    <div>
+                      <div class="segment-kpi-label">MAU</div>
+                      <div class="segment-kpi-value">20萬</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">DAU/MAU</div>
+                      <div class="segment-kpi-value">35%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">內容偏好</div>
+                      <div class="segment-kpi-value">深夜綜藝 / 動漫</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">裝置</div>
+                      <div class="segment-kpi-value">Mobile 為主</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="segment-card">
+                  <div class="segment-name">4–5. 英文新聞 &amp; 高 LTV 付費</div>
+                  <div class="segment-kpis">
+                    <div>
+                      <div class="segment-kpi-label">MAU 合計</div>
+                      <div class="segment-kpi-value">10–15萬</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">付費佔比</div>
+                      <div class="segment-kpi-value">&gt; 18%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">D30 Retention</div>
+                      <div class="segment-kpi-value">&gt; 40%</div>
+                    </div>
+                    <div>
+                      <div class="segment-kpi-label">ARPU / LTV</div>
+                      <div class="segment-kpi-value">高於平均</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="footnote">
+                實際 segmentation 由行為 + 收入 + Vpon 輪廓共同建模；以上數值為示意，最終用實數更新並放入固定 Dashboard。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 6: Segment 優先級 + Bar 單卡 -->
+    <section class="slide" data-page="6">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">SEGMENT PRIORITY</div>
+              <div class="brand-text-sub">WHO TO FOCUS FIRST</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>6 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">哪一群最值錢？用 KPI 排優先順序</div>
+          <div class="title-sub">
+            <span class="pill pill-green">家庭 + 高 LTV 付費</span>
+            <span class="pill pill-blue">金融</span>
+            <span class="pill pill-red">年輕娛樂</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Segment 優先級（示意）</div>
+              <div class="panel-tag">PRIORITISATION</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:20%;">Segment</th>
+                    <th style="width:18%;">規模</th>
+                    <th style="width:18%;">黏性 / LTV</th>
+                    <th>管理建議</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>高 LTV 付費 + 家庭</td>
+                    <td>中–大</td>
+                    <td>最高</td>
+                    <td>作為核心防守對象，重點看 Retention / 續訂率；優先匹配最好內容及廣告體驗。</td>
+                  </tr>
+                  <tr>
+                    <td>金融 / 投資</td>
+                    <td>中</td>
+                    <td>高</td>
+                    <td>適合 premium 金融廣告主；可嘗試建立「財經觀眾 Package」賣更高 CPM。</td>
+                  </tr>
+                  <tr>
+                    <td>年輕娛樂</td>
+                    <td>中–大</td>
+                    <td>中</td>
+                    <td>對標 ViuTV 的戰場；用綜藝 / 遊戲 / Anime Clip 做拉新，再用本地劇留人。</td>
+                  </tr>
+                  <tr>
+                    <td>英文 / 國際新聞</td>
+                    <td>小–中</td>
+                    <td>高</td>
+                    <td>雖然規模較小，但品牌價值及廣告 CPM 高；適合作為 high-end audience。</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="bar-chart" style="margin-top:1.4vh;">
+                <div class="bar-row">
+                  <div class="bar-label">家庭 / 高 LTV</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width:90%;"></div>
+                  </div>
+                  <div class="bar-value">首要</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">金融 / 投資</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt1" style="width:78%;"></div>
+                  </div>
+                  <div class="bar-value">第二</div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label">年輕娛樂</div>
+                  <div class="bar-track">
+                    <div class="bar-fill alt2" style="width:74%;"></div>
+                  </div>
+                  <div class="bar-value">第三</div>
+                </div>
+              </div>
+
+              <div class="footnote">
+                建議：Dashboard 上為每個 Segment 提供獨立 KPI 區塊（DAU/MAU、Retention、ARPU），每月 review 是否值得加大內容 / 廣告投資。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 7: myTV & News vs ViuTV 單卡 -->
+    <section class="slide" data-page="7">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">COMPETITIVE VIEW</div>
+              <div class="brand-text-sub">myTV SUPER / TVB NEWS vs Viu / ViuTV</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>7 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">可被 Audit 的關鍵指標對比</div>
+          <div class="title-sub">
+            <span class="pill pill-green">只用有來源數據</span>
+            <span class="pill pill-blue">TVB 優勢：家庭 &amp; 本地內容黏性</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">市場滲透 &amp; 內容黏性（示意視覺）</div>
+              <div class="panel-tag">Vpon · 年報 · INTERNAL</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:22%;">指標</th>
+                    <th style="width:26%;">TVB（myTV / News）</th>
+                    <th style="width:26%;">Viu / ViuTV</th>
+                    <th>數據來源</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>香港 App 滲透率</td>
+                    <td>略高（示意：Top 1–2）</td>
+                    <td>Top 2–3</td>
+                    <td>Vpon、Similarweb（估算）</td>
+                  </tr>
+                  <tr>
+                    <td>OTT / Digital 收入規模</td>
+                    <td>穩定增長</td>
+                    <td>較高，含海外市場</td>
+                    <td>TVB &amp; PCCW / Viu 年報</td>
+                  </tr>
+                  <tr>
+                    <td>本地劇完成率</td>
+                    <td>75%（TVB 本地劇）</td>
+                    <td>約 58%（行業平均）</td>
+                    <td>TVB 內部 log + 行業 benchmark</td>
+                  </tr>
+                  <tr>
+                    <td>家庭 / 親子場景時長</td>
+                    <td>高（55 分鐘 / 日）</td>
+                    <td>中–高</td>
+                    <td>TVB 行為數據 + Vpon 家庭受眾重疊</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="funnel" style="margin-top:1.4vh;">
+                <div class="funnel-step">
+                  <div class="funnel-label">劇集完成率</div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill" style="width:75%;"></div>
+                  </div>
+                  <div class="funnel-value">TVB 本地劇</div>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-label"></div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill mid" style="width:58%;"></div>
+                  </div>
+                  <div class="funnel-value">行業平均</div>
+                </div>
+              </div>
+
+              <div class="footnote">
+                結論：TVB 不一定要在「總用戶規模」上完全超越 Viu，但可在「家庭 / 本地劇 / 財經新聞」三個場景建立明顯優勢，成為廣告及內容投資的賣點。所有第三方數據會在附錄清楚標註來源與估算性質。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 8: 實驗 1 & 2 Table 單卡 -->
+    <section class="slide" data-page="8">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">USE CASES</div>
+              <div class="brand-text-sub">EXPERIMENTS WE CAN START NOW</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>8 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">3 個可以即刻落地的數據實驗（1–2）</div>
+          <div class="title-sub">
+            <span class="pill pill-green">Retention 實驗</span>
+            <span class="pill pill-blue">Cross-App 引流實驗</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">實驗設計總覽</div>
+              <div class="panel-tag">EXPERIMENT 1 &amp; 2</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:18%;">實驗</th>
+                    <th style="width:25%;">目標 / 對象</th>
+                    <th style="width:27%;">做法（簡述）</th>
+                    <th>量度 &amp; 成功標準</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1. myTV 個人化推送</td>
+                    <td>
+                      <strong>目標：</strong>DAU/MAU +3–5ppt。<br>
+                      <strong>對象：</strong>最近 30 日有睇劇、最近 7 日未/少啟動的準流失用戶。
+                    </td>
+                    <td>
+                      依據過往 watch history &amp; 偏好 genre，推送 1–2 套最相關本地劇／綜藝；A/B 測試不同比例及推送時間。
+                    </td>
+                    <td>
+                      DAU/MAU、D7/D30 再活躍率與對照組比較。<br>
+                      若提升持續 ≥ 3–5ppt，即視為可 rollout 的常規策略。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2. TVB News → myTV 引流</td>
+                    <td>
+                      <strong>目標：</strong>把重度新聞用戶變成劇集觀眾。<br>
+                      <strong>對象：</strong>只用 News、少用 myTV 的裝置 / 帳戶。
+                    </td>
+                    <td>
+                      在 News App 中展示 myTV 剧集短片 / Banner；用 device ID / user ID 追蹤安裝 &amp; 開啟，打造 cross-app 漏斗。
+                    </td>
+                    <td>
+                      安裝率、首啟率、首看率、30 日留存率；如表現高於常規拉新的 benchmark，即擴大引流版位及內容種類。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="footnote">
+                以上兩個實驗全部只用現有數據 &amp; 推送 / Banner 系統即可啟動，建議在 3 個月內完成第一輪實驗並回報管理層。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 9: 實驗 3 + 建議 Table 單卡 -->
+    <section class="slide" data-page="9">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">CONTENT ROI</div>
+              <div class="brand-text-sub">VERIFY HK$200M DRAMA INVESTMENT</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>9 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+              <div class="page-dot"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">實驗 3：用數據驗證 HK$200M 劇集投資合理性</div>
+          <div class="title-sub">
+            <span class="pill pill-red">內容投資 ROI 模型</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">本地劇 vs 外購劇：對 LTV 的影響</div>
+              <div class="panel-tag">EXPERIMENT 3</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:20%;">步驟</th>
+                    <th style="width:35%;">要做什麼（BA 工作）</th>
+                    <th>管理層可以看到的結果</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1. 數據對比</td>
+                    <td>
+                      過去 12 個月，本地劇 vs 外購劇：<br>
+                      ・完成率、平均觀看時長<br>
+                      ・帶來的新註冊人數<br>
+                      ・觀眾 D30 Retention &amp; Churn
+                    </td>
+                    <td>
+                      一張簡單表：本地劇在「完成率 / 留存」上比外購劇高多少個百分點。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2. LTV 模型</td>
+                    <td>
+                      用 Churnkey 模型：<br>
+                      如果本地劇令 churn 每月減少 1–2%，LTV 大約可以增加 10–20%。 
+                    </td>
+                    <td>
+                      圖表顯示：不同 churn scenario 對 LTV 的影響；例如 LTV 由 HK$X → HK$X×1.2。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3. 投資對照</td>
+                    <td>
+                      用「LTV 提升 × 受影響用戶數」估算：<br>
+                      本地劇多帶來幾多額外收益（N 年期）。
+                    </td>
+                    <td>
+                      一條簡單條形圖：<br>
+                      1）本地劇額外帶來的預期收入<br>
+                      2）HK$200M 劇集投資額<br>
+                      → 直觀看到是否「值得」。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="footnote">
+                管理層只需要看最後兩個結果：<strong>（1）本地劇對 LTV 的 uplift、（2）額外收入 vs 投資額</strong>；模型細節由 BA 團隊負責維護。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide 10: Data Source & 90-Day Plan 單卡 -->
+    <section class="slide" data-page="10">
+      <div class="slide-inner">
+        <header class="top-bar">
+          <div class="brand">
+            <div class="brand-logo"></div>
+            <div>
+              <div class="brand-text-main">NEXT STEPS</div>
+              <div class="brand-text-sub">DATA SOURCES · 90-DAY PLAN</div>
+            </div>
+          </div>
+          <div class="page-indicator">
+            <span>10 / 10</span>
+            <div class="page-dots">
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot"></div>
+              <div class="page-dot active"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="title-block">
+          <div class="title-main">數據來源透明化 &amp; 90 日行動計劃</div>
+          <div class="title-sub">
+            <span class="pill pill-blue">Internal / External / Estimate 清晰分開</span>
+            <span class="pill pill-green">3 個月內可交付成果</span>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">資料來源分類 &amp; 行動時間表</div>
+              <div class="panel-tag">APPENDIX · ACTION</div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:22%;">類別</th>
+                    <th style="width:36%;">範例</th>
+                    <th>備註</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Internal</td>
+                    <td>App 行為 Log、內容庫、廣告曝光與收入、訂閱 / ARPU。</td>
+                    <td>所有「TVB 自己的數字」，是 KPI &amp; 建議的主要來源。</td>
+                  </tr>
+                  <tr>
+                    <td>External</td>
+                    <td>TVB &amp; Viu 年報、Vpon Audience、CleverTap / Churnkey 行業報告。</td>
+                    <td>用來定 benchmark &amp; 標準線，不代替內部實數。</td>
+                  </tr>
+                  <tr>
+                    <td>Estimate / Model</td>
+                    <td>LTV 推算、OTT 市場總規模估算等。</td>
+                    <td>必須在附錄標註假設，獨立於 Internal / External。</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="funnel" style="margin-top:1.4vh;">
+                <div class="funnel-step">
+                  <div class="funnel-label">30 日內</div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill" style="width:100%;"></div>
+                  </div>
+                  <div class="funnel-value">打好基礎</div>
+                </div>
+                <div style="font-size:1.8vh;color:var(--text-muted);margin-left:12vh;margin-bottom:0.7vh;">
+                  ・確認 Active &amp; KPI 定義<br>
+                  ・完成內部數據盤點 &amp; tracking 缺口清單<br>
+                  ・搭起初版 KPI Dashboard（DAU/MAU、Retention）
+                </div>
+
+                <div class="funnel-step">
+                  <div class="funnel-label">60 日內</div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill mid" style="width:80%;"></div>
+                  </div>
+                  <div class="funnel-value">啟動實驗</div>
+                </div>
+                <div style="font-size:1.8vh;color:var(--text-muted);margin-left:12vh;margin-bottom:0.7vh;">
+                  ・Roll out 實驗 1 &amp; 2<br>
+                  ・完成 5 大 Segment 定義 &amp; 初版 Audience Package
+                </div>
+
+                <div class="funnel-step">
+                  <div class="funnel-label">90 日內</div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill low" style="width:65%;"></div>
+                  </div>
+                  <div class="funnel-value">交付結果</div>
+                </div>
+                <div style="font-size:1.8vh;color:var(--text-muted);margin-left:12vh;">
+                  ・向管理層匯報實驗結果：DAU/MAU、Retention、ARPU uplift<br>
+                  ・完成劇集投資 ROI 模型初版，支援下一年度內容預算
+                </div>
+              </div>
+
+              <div class="footnote" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>如管理層同意方向，BA 團隊可在 1 季內交付首批實驗結果與 Dashboard。</span>
+                <span>謝謝。</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn nav-prev" id="prevBtn">‹</button>
+    <button class="nav-btn nav-next" id="nextBtn">›</button>
+  </div>
 </div>
 
 <script>
-  (function () {
-    const pages = Array.from(document.querySelectorAll('.slide-page'));
-    const total = pages.length;
-    let current = 1;
+(function() {
+  const slides = document.getElementById('slides');
+  const slideEls = Array.from(slides.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let currentIndex = 0;
 
-    const indexLabel = document.getElementById('slideIndexLabel');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+  function updateDots() {
+    const currentSlide = slideEls[currentIndex];
+    const page = currentSlide.getAttribute('data-page');
+    const total = slideEls.length;
 
-    function showSlide(n) {
-      if (n < 1) n = 1;
-      if (n > total) n = total;
-      current = n;
-      pages.forEach((p) => {
-        p.classList.toggle('active', Number(p.dataset.slide) === current);
+    document.querySelectorAll('.page-indicator span').forEach(span => {
+      span.textContent = page + ' / ' + total;
+    });
+
+    document.querySelectorAll('.page-dots').forEach(group => {
+      const dots = Array.from(group.children);
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === currentIndex);
       });
-      indexLabel.textContent = String(current).padStart(2, '0');
+    });
+
+    prevBtn.classList.toggle('disabled', currentIndex === 0);
+    nextBtn.classList.toggle('disabled', currentIndex === total - 1);
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= slideEls.length) return;
+    currentIndex = index;
+    const offset = slideEls[index].offsetLeft;
+    slides.scrollTo({ left: offset, behavior: 'smooth' });
+    updateDots();
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) goToSlide(currentIndex - 1);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < slideEls.length - 1) goToSlide(currentIndex + 1);
+  });
+
+  slides.addEventListener('scroll', () => {
+    const scrollLeft = slides.scrollLeft;
+    const width = slides.clientWidth;
+    const index = Math.round(scrollLeft / width);
+    if (index !== currentIndex) {
+      currentIndex = index;
+      updateDots();
     }
+  });
 
-    prevBtn.addEventListener('click', function () {
-      showSlide(current - 1);
-    });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') nextBtn.click();
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevBtn.click();
+  });
 
-    nextBtn.addEventListener('click', function () {
-      showSlide(current + 1);
-    });
-
-    // iPad 左右滑動換頁
-    let startX = null;
-    const shell = document.querySelector('.slide-shell');
-
-    shell.addEventListener('touchstart', function (e) {
-      if (e.touches.length === 1) {
-        startX = e.touches[0].clientX;
-      }
-    });
-
-    shell.addEventListener('touchend', function (e) {
-      if (startX === null) return;
-      const endX = e.changedTouches[0].clientX;
-      const delta = endX - startX;
-      const threshold = 50;
-      if (delta > threshold) {
-        showSlide(current - 1);
-      } else if (delta < -threshold) {
-        showSlide(current + 1);
-      }
-      startX = null;
-    });
-
-    showSlide(1);
-  })();
+  updateDots();
+})();
 </script>
 
 
